@@ -1,0 +1,77 @@
+{
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "pdf-opener-pro",
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "dialog": {
+        "all": true,
+        "open": true,
+        "save": true
+      },
+      "process": {
+        "all": true
+      },
+      "window": {
+        "all": true
+      },
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["$APPDATA/**", "$DOCUMENT/**", "$DOWNLOAD/**", "$DESKTOP/**"]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "identifier": "com.pdfopenerpro.app",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.ico"
+      ],
+      "resources": [],
+
+      "copyright": "Copyright © 2026 PDF Opener Pro",
+      "category": "Productivity",
+      "shortDescription": "Professional PDF Opener",
+      "longDescription": "Advanced PDF viewer and editor with annotations, signatures, and text tools",
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "10.13",
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null
+      },
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      },
+      "deb": {
+        "depends": []
+      }
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "PDF Opener Pro",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600
+      }
+    ]
+  }
+}
