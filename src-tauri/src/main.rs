@@ -50,18 +50,51 @@ fn register_pdf_association() {
     }
 }
 
+#[cfg(target_os = "windows")]
+fn setup_webview2_user_data() {
+    if std::env::var_os("WEBVIEW2_USER_DATA_FOLDER").is_none() {
+        let base = std::env::var("LOCALAPPDATA")
+            .map(std::path::PathBuf::from)
+            .unwrap_or_else(|_| std::env::temp_dir());
+        let pid = std::process::id();
+        let app_dir = base.join("pdf-opener-pro").join("instances").join(format!("inst_{}", pid));
+        let _ = std::fs::create_dir_all(&app_dir);
+        std::env::set_var("WEBVIEW2_USER_DATA_FOLDER", &app_dir);
+
+        // Clean up previous closed instance folders
+        let instances_root = base.join("pdf-opener-pro").join("instances");
+        if let Ok(entries) = std::fs::read_dir(&instances_root) {
+            for entry in entries.flatten() {
+                if let Ok(file_type) = entry.file_type() {
+                    if file_type.is_dir() {
+                        let path = entry.path();
+                        if path != app_dir {
+                            let _ = std::fs::remove_dir_all(&path);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn main() {
     env_logger::init();
 
     #[cfg(target_os = "windows")]
-    register_pdf_association();
+    {
+        setup_webview2_user_data();
+        register_pdf_association();
+    }
 
-    tauri::Builder::default()
+    if let Err(e) = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_cli_args,
             read_file_binary,
             write_file_binary
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    {
+        log::error!("Error while running tauri application: {}", e);
+    }
 }
