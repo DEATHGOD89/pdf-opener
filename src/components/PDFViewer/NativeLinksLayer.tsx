@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as pdfjs from 'pdfjs-dist';
+import { open as openBrowser } from '@tauri-apps/api/shell';
 
 interface NativeLinksLayerProps {
   page: pdfjs.PDFPageProxy;
@@ -11,6 +12,12 @@ interface PdfLink {
   url?: string;
   dest?: string | any[];
   rect: number[];
+}
+
+function isSafeExternalUrl(url?: string): boolean {
+  if (!url) return false;
+  const trimmed = url.trim().toLowerCase();
+  return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('mailto:');
 }
 
 export const NativeLinksLayer: React.FC<NativeLinksLayerProps> = ({ page, zoom }) => {
@@ -43,17 +50,21 @@ export const NativeLinksLayer: React.FC<NativeLinksLayerProps> = ({ page, zoom }
         const width = Math.abs(x2 - x1);
         const height = Math.abs(y2 - y1);
         
+        const isSafe = isSafeExternalUrl(link.url);
+
         return (
           <a
             key={link.id}
-            href={link.url || '#'}
-            target={link.url ? "_blank" : undefined}
-            rel="noopener noreferrer"
+            href={isSafe ? link.url : undefined}
             title={link.url}
-            onClick={(e) => {
-              if (!link.url) {
-                // Internal PDF links (dest) aren't fully supported without a LinkService yet
-                e.preventDefault();
+            onClick={async (e) => {
+              e.preventDefault();
+              if (link.url && isSafe) {
+                try {
+                  await openBrowser(link.url);
+                } catch (err) {
+                  console.error("Failed to open external link:", err);
+                }
               }
             }}
             style={{

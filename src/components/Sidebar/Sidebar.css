@@ -1,6 +1,6 @@
 .sidebar {
-  width: 320px;
-  min-width: 320px;
+  width: 300px;
+  min-width: 300px;
   background: var(--surface-1);
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -8,11 +8,12 @@
   height: 100%;
   box-shadow: var(--shadow-sm);
   z-index: 10;
+  user-select: none;
 }
 
 .sidebar-tabs {
   display: flex;
-  padding: 12px;
+  padding: 10px 12px;
   gap: 8px;
   border-bottom: 1px solid var(--border-color);
   background: var(--surface-2);
@@ -23,7 +24,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  gap: 6px;
+  padding: 8px 12px;
   border: 1px solid transparent;
   background: transparent;
   border-radius: var(--radius-md);
@@ -44,12 +46,23 @@
   box-shadow: var(--shadow-sm);
 }
 
+.annotations-count-pill {
+  background: var(--primary);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+
 .sidebar-content {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 16px;
   background: var(--surface-1);
+  scroll-behavior: smooth;
 }
 
 /* Empty State Styling for Lists */
@@ -69,24 +82,158 @@
   font-weight: 500;
 }
 
-/* Thumbnail Items Polish */
-.thumbnail-item {
-  margin-bottom: 16px;
-  cursor: pointer;
+/* Thumbnails UI */
+.thumbnails-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.thumbnail-preview {
-  background: var(--bg-color);
+.thumbnails-header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.thumb-header-organize-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--surface-1);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 24px;
-  text-align: center;
-  transition: var(--transition-fast);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: normal;
+  transition: all 0.15s ease;
+}
+
+.thumb-header-organize-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.thumbnails-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.thumbnail-card {
+  width: 100%;
+  max-width: 230px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.thumbnail-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.thumbnail-card.active {
+  border-color: var(--primary);
+  background: var(--surface-1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), var(--shadow-md);
+}
+
+.thumbnail-preview-frame {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
 
-.thumbnail-preview:hover {
+.thumbnail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-sm);
+  transition: opacity 0.2s ease;
+}
+
+.thumbnail-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  transition: all 0.15s ease;
+}
+
+.thumbnail-badge.badge-active {
+  background: var(--primary);
+  color: white;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  transform: translateY(-2px);
+}
+
+/* Skeleton Loading State with Shimmer */
+.thumbnail-skeleton {
+  width: 100%;
+  position: relative;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail-skeleton-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.thumbnail-skeleton-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  z-index: 1;
 }

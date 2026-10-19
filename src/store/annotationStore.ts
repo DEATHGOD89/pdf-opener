@@ -55,8 +55,8 @@ export const useAnnotationStore = create<AnnotationStore>()(
         future: [],
         annotations: state.annotations.filter(a => a.id !== id)
       })),
-      clearAnnotations: () => set((state) => ({ 
-        past: [...state.past, state.annotations],
+      clearAnnotations: () => set(() => ({ 
+        past: [],
         future: [],
         annotations: [] 
       })),

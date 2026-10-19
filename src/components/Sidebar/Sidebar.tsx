@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { LayoutGrid, MessageSquare } from 'lucide-react';
 import { Thumbnails } from './Thumbnails';
 import { useAnnotationStore } from '../../store/annotationStore';
@@ -16,6 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ pdf, onPageSelect }) => {
   const [activeTab, setActiveTab] = useState<'thumbnails' | 'annotations'>('thumbnails');
   const { annotations, removeAnnotation } = useAnnotationStore();
   const { currentPage, totalPages } = useUIStore();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="sidebar">
@@ -26,19 +27,31 @@ export const Sidebar: React.FC<SidebarProps> = ({ pdf, onPageSelect }) => {
           title="Thumbnails"
         >
           <LayoutGrid size={18} />
+          <span style={{ fontSize: '12px', fontWeight: 600 }}>Pages</span>
         </button>
         <button
           className={activeTab === 'annotations' ? 'active' : ''}
           onClick={() => setActiveTab('annotations')}
           title="Annotations"
+          style={{ position: 'relative' }}
         >
           <MessageSquare size={18} />
+          <span style={{ fontSize: '12px', fontWeight: 600 }}>Annotations</span>
+          {annotations.length > 0 && (
+            <span className="annotations-count-pill">{annotations.length}</span>
+          )}
         </button>
       </div>
       
-      <div className="sidebar-content">
+      <div className="sidebar-content" ref={contentRef}>
         {activeTab === 'thumbnails' && (
-          <Thumbnails pdf={pdf} totalPages={totalPages} currentPage={currentPage} onPageSelect={onPageSelect} />
+          <Thumbnails 
+            pdf={pdf} 
+            totalPages={totalPages} 
+            currentPage={currentPage} 
+            onPageSelect={onPageSelect}
+            scrollContainerRef={contentRef}
+          />
         )}
         {activeTab === 'annotations' && (
           <div className="annotations-list">

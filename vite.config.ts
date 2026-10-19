@@ -23,6 +23,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'pdfjs': ['pdfjs-dist'],
+          'pdf-lib': ['pdf-lib'],
           'vendor': ['react', 'react-dom', 'zustand'],
           'ui': ['@mantine/core', '@mantine/hooks'],
         },

@@ -23,10 +23,15 @@
         "all": true
       },
       "fs": {
-        "readFile": true,
-        "writeFile": true,
-        "scope": ["$APPDATA/**", "$DOCUMENT/**", "$DOWNLOAD/**", "$DESKTOP/**"]
+        "all": true,
+        "scope": ["**"]
+      },
+      "shell": {
+        "open": true
       }
+    },
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
     },
     "bundle": {
       "active": true,
@@ -38,7 +43,6 @@
         "icons/icon.ico"
       ],
       "resources": [],
-
       "copyright": "Copyright © 2026 PDF Opener Pro",
       "category": "Productivity",
       "shortDescription": "Professional PDF Opener",

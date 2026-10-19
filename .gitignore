@@ -2,6 +2,9 @@ node_modules/
 dist/
 .tsbuildinfo
 src-tauri/target/
+target/
+*.exe
+*.pdb
 .vscode/
 .guider/
 *.log

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MousePointer2, Hand, Pen, Eraser, Highlighter, Menu, FolderOpen, Save, Settings, Signature } from 'lucide-react';
+import { MousePointer2, Hand, Pen, Eraser, Highlighter, Menu, FolderOpen, Save, Settings, Signature, Layers, Printer, Moon, Sun } from 'lucide-react';
 import { ColorPicker } from './ColorPicker';
 import { FontSelector } from './FontSelector';
 import { TextTool } from './TextTool';
@@ -12,11 +12,12 @@ interface ToolbarProps {
   isSidebarOpen: boolean;
   onOpenFile: () => void;
   onSaveFile?: () => void;
+  onPrint?: () => void;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ onToggleSidebar, isSidebarOpen, onOpenFile, onSaveFile }) => {
+export const Toolbar: React.FC<ToolbarProps> = ({ onToggleSidebar, isSidebarOpen, onOpenFile, onSaveFile, onPrint }) => {
   const { selectedTool, setSelectedTool, selectedColor, setSelectedColor, selectedFont, setSelectedFont } = useToolStore();
-  const { setSignatureModalOpen, setSettingsModalOpen } = useUIStore();
+  const { setSignatureModalOpen, setSettingsModalOpen, setOrganizeModalOpen, nightMode, toggleNightMode } = useUIStore();
 
   const tools: { id: ToolType; icon: React.ReactNode; label: string }[] = [
     { id: 'select', icon: <MousePointer2 size={18} />, label: 'Select' },
@@ -76,12 +77,34 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onToggleSidebar, isSidebarOpen
       </div>
       
       <div className="toolbar-right">
+        <button 
+          className="toolbar-btn" 
+          title="Edit & Organize Pages (Split, Delete, Combine, Rotate)" 
+          aria-label="Edit Pages" 
+          onClick={() => setOrganizeModalOpen(true)}
+        >
+          <Layers size={18} />
+          <span>Edit Pages</span>
+        </button>
+        <div className="toolbar-divider" />
         <button className="toolbar-btn primary-btn" title="Open PDF (Ctrl+O)" aria-label="Open PDF" onClick={onOpenFile}>
           <FolderOpen size={18} />
           <span>Open</span>
         </button>
         <button className="toolbar-btn" title="Save PDF (Ctrl+S)" aria-label="Save PDF" onClick={onSaveFile}>
           <Save size={18} />
+        </button>
+        <button className="toolbar-btn" title="Print Document (Ctrl+P)" aria-label="Print Document" onClick={onPrint}>
+          <Printer size={18} />
+        </button>
+        <div className="toolbar-divider" />
+        <button 
+          className={`toolbar-btn ${nightMode ? 'active' : ''}`} 
+          title="Toggle Night Reading Mode (Ctrl+N)" 
+          aria-label="Toggle Night Reading Mode" 
+          onClick={toggleNightMode}
+        >
+          {nightMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         <div className="toolbar-divider" />
         <button className="toolbar-btn" title="Settings" aria-label="Settings" onClick={() => setSettingsModalOpen(true)}>

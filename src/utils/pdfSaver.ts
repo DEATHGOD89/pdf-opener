@@ -59,6 +59,7 @@ export const saveAnnotatedPDF = async (originalBytes: Uint8Array, annotations: A
           height: ann.height,
           color: hexToRgb(ann.color || '#ffff00'),
           opacity: 0.3,
+          rotate: degrees(-rotation),
         });
       } else if (ann.type === 'signature' && ann.content && (ann.content.startsWith('data:image/png;base64,') || ann.content.startsWith('data:image/jpeg;base64,'))) {
         const imageBytes = await fetch(ann.content).then(res => res.arrayBuffer());

@@ -4,11 +4,15 @@ import { useEffect, useRef } from 'react';
 interface KeyboardHandlers {
   onSave?: () => void;
   onOpen?: () => void;
+  onPrint?: () => void;
+  onToggleNightMode?: () => void;
+  onJumpToPage?: () => void;
   onUndo?: () => void;
   onRedo?: () => void;
   onFind?: () => void;
   onZoomIn?: () => void;
   onZoomOut?: () => void;
+  onResetZoom?: () => void;
   onNextPage?: () => void;
   onPrevPage?: () => void;
 }
@@ -28,6 +32,21 @@ export function useKeyboard(handlers: KeyboardHandlers) {
   useHotkeys('ctrl+o, meta+o', (e) => {
     e.preventDefault();
     handlersRef.current.onOpen?.();
+  });
+
+  useHotkeys('ctrl+p, meta+p', (e) => {
+    e.preventDefault();
+    handlersRef.current.onPrint?.();
+  });
+
+  useHotkeys('ctrl+n, meta+n', (e) => {
+    e.preventDefault();
+    handlersRef.current.onToggleNightMode?.();
+  });
+
+  useHotkeys('ctrl+g, meta+g', (e) => {
+    e.preventDefault();
+    handlersRef.current.onJumpToPage?.();
   });
 
   useHotkeys('ctrl+z, meta+z', (e) => {
@@ -53,6 +72,11 @@ export function useKeyboard(handlers: KeyboardHandlers) {
   useHotkeys('ctrl+-, meta+-, ctrl+num_subtract, meta+num_subtract', (e) => {
     e.preventDefault();
     handlersRef.current.onZoomOut?.();
+  });
+
+  useHotkeys('ctrl+0, meta+0, ctrl+num_0, meta+num_0', (e) => {
+    e.preventDefault();
+    handlersRef.current.onResetZoom?.();
   });
   
   useHotkeys('right, pagedown', (e) => {
